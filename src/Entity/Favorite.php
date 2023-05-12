@@ -15,11 +15,11 @@ class Favorite
 
     #[ORM\ManyToOne(inversedBy: 'favorites')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $userId = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'favorites')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Post $postId = null;
+    private ?Post $post = null;
 
     public function getId(): ?int
     {
@@ -28,24 +28,24 @@ class Favorite
 
     public function getUserId(): ?User
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(?User $userId): self
+    public function setUserId(?User $user): self
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getPostId(): ?Post
     {
-        return $this->postId;
+        return $this->post;
     }
 
-    public function setPostId(?Post $postId): self
+    public function setPostId(?Post $post): self
     {
-        $this->postId = $postId;
+        $this->post = $post;
 
         return $this;
     }
