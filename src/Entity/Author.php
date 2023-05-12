@@ -24,7 +24,7 @@ class Author
     #[ORM\Column(length: 255)]
     private ?string $thumbnail = null;
 
-    #[ORM\OneToMany(mappedBy: 'authorId', targetEntity: Post::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
 
     public function __construct()
@@ -85,7 +85,7 @@ class Author
     {
         if (!$this->posts->contains($post)) {
             $this->posts->add($post);
-            $post->setAuthorId($this);
+            $post->setAuthor($this);
         }
 
         return $this;
@@ -95,8 +95,8 @@ class Author
     {
         if ($this->posts->removeElement($post)) {
             // set the owning side to null (unless already changed)
-            if ($post->getAuthorId() === $this) {
-                $post->setAuthorId(null);
+            if ($post->getAuthor() === $this) {
+                $post->setAuthor(null);
             }
         }
 

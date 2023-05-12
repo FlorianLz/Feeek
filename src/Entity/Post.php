@@ -29,7 +29,7 @@ class Post
 
     #[ORM\ManyToOne(inversedBy: 'posts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Author $authorId = null;
+    private ?Author $author = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -37,7 +37,7 @@ class Post
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'postId', targetEntity: Favorite::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Favorite::class, orphanRemoval: true)]
     private Collection $favorites;
 
     #[ORM\ManyToMany(targetEntity: Tag::class, inversedBy: 'posts')]
@@ -102,14 +102,14 @@ class Post
         return $this;
     }
 
-    public function getAuthorId(): ?Author
+    public function getAuthor(): ?Author
     {
-        return $this->authorId;
+        return $this->author;
     }
 
-    public function setAuthorId(?Author $authorId): self
+    public function setAuthor(?Author $author): self
     {
-        $this->authorId = $authorId;
+        $this->author = $author;
 
         return $this;
     }
