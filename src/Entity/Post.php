@@ -73,7 +73,10 @@ class Post
 
     public function setDescription(string $description): self
     {
-        $this->description = $description;
+        if (strlen($description) > 250) {
+            $description = substr($description, 0, 250) . '...';
+        }
+        $this->description = utf8_encode($description);
 
         return $this;
     }
