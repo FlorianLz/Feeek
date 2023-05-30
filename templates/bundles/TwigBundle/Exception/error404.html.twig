@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="flex flex-col items-center mt-48 gap-8">
+        <div class="flex flex-col items-center">
+            <span class="font-bold text-6xl text-primary">404</span>
+            <span class="font-bold">Page not found</span>
+        </div>
+        <p>
+            The requested page couldn't be located. Checkout for any URL
+            misspelling or <a href="{{ path('app_home') }}">return to the homepage</a>.
+        </p>
+    </div>
+{% endblock %}
