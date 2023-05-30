@@ -8,7 +8,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 'sans': ['Inter', 'sans-serif'],
-                'clash': ['ClashDisplay', 'sans-serif'],
+                'clash': ['Clash Display', 'sans-serif'],
             },
             colors: {
                 'primary': '#3603EC',
