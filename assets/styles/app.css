@@ -7,3 +7,4 @@
 @tailwind utilities;
 
 @import "global/fonts.css";
+@import "global/containers.css";
