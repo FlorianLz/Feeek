@@ -43,10 +43,16 @@ class PostController extends AbstractController
     #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
     public function show(Post $post): Response
     {
+        $author = $post->getAuthor();
+        $tags = $post->getTags();
+
         return $this->render('post/show.html.twig', [
             'post' => $post,
+            'author' => $author,
+            'tags' => $tags,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, PostRepository $postRepository): Response

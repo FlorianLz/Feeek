@@ -5,38 +5,28 @@
 {% block body %}
     <h1>Post</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ post.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ post.title }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ post.description }}</td>
-            </tr>
-            <tr>
-                <th>Thumbnail</th>
-                <td>{{ post.thumbnail }}</td>
-            </tr>
-            <tr>
-                <th>Url</th>
-                <td>{{ post.url }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>UpdatedAt</th>
-                <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <a href="{{ post.url }}" class="relative block w-96 h-[697px] rounded-3xl overflow-hidden shadow-lg no-underline">
+        <img src="{{ post.thumbnail }}" alt="{{ post.title }}" class="w-96 h-[697px] rounded-3xl object-cover">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-transparent flex justify-between flex-col">
+            <div class="p-4">
+                {% for tag in post.tags %}
+                    <span class="p-1 text-black bg-white bg-opacity-50 rounded mr-2">{{ tag.name }}</span>
+                {% endfor %}
+            </div>
+            <div class="p-4">
+                <h2 class="text-xl font-sans font-bold text-white mb-1">{{ post.title }}</h2>
+                <p class="text-sm font-sans text-white">{{ post.description }}</p>
+                <div class="flex align-items-center justify-content-center mt-5 mb-5">
+                    <img src="{{ author.thumbnail }}" alt="{{ author.name }}" class="w-[38px] h-[38px] rounded-full mr-3">
+                    <div>
+                        <p class="text-white font-sans text-sm ">Par <b>{{ author.name }}</b></p>
+                        <p class="text-white text-sm font-sans">il y a {{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+
 
     <a href="{{ path('app_post_index') }}">back to list</a>
 
