@@ -33,4 +33,16 @@ class FavoriteController extends AbstractController
         $this->favoriteRepository->toggleFavorite($user, $post);
         return new Response(json_encode(['success' => true]));
     }
+
+    #[Route('/favorites', name: 'app_favorites_home')]
+    public function favorites(Request $request): Response
+    {
+        $connectedUser = $this->getUser();
+        $favorites = $this->postRepository->findAllFavorites($connectedUser);
+
+        return $this->render('favorite/index.html.twig', [
+            'posts' => $favorites,
+            'connectedUser' => $connectedUser
+        ]);
+    }
 }
