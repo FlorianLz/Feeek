@@ -3,7 +3,52 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-<div class="example-wrapper font-clash">
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper bg-blue-600">
     Homepage
+    {% for post in posts %}
+        <div class="bg-blue-200">
+            <h2>{{ post.title }}</h2>
+            {{ post.description }}
+            <img src="{{ post.thumbnail }}" alt="{{ post.title }}">
+            {% if connectedUser %}
+                {% if post.id in favorites %}
+                    <button class="likeButton bg-red-500" data-idPost="{{ post.id }}">Like</button>
+                {% else %}
+                    <button class="likeButton" data-idPost="{{ post.id }}">Like</button>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endfor %}
 </div>
+    <script>
+        console.log('test');
+        const likeButtons = document.querySelectorAll('.likeButton');
+        likeButtons.forEach(likeButton => {
+            likeButton.addEventListener('click', () => {
+                const idPost = likeButton.dataset.idpost;
+                fetch('/favorite/toggle', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        idPost: idPost
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success){
+                        likeButton.classList.toggle('bg-red-500');
+                    }
+                })
+            })
+        });
+
+    </script>
+
 {% endblock %}
