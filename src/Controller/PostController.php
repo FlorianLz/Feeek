@@ -45,11 +45,22 @@ class PostController extends AbstractController
     {
         $author = $post->getAuthor();
         $tags = $post->getTags();
+        $date = $post->getCreatedAt();
+
+        $now = new \DateTime();
+        $diff = $now->diff($date);
+
+        $daysAgo = $diff->days;
+        $hoursAgo = $diff->h;
+        $minutesAgo = $diff->i;
 
         return $this->render('post/show.html.twig', [
             'post' => $post,
             'author' => $author,
             'tags' => $tags,
+            'daysAgo' => $daysAgo,
+            'hoursAgo' => $hoursAgo,
+            'minutesAgo' => $minutesAgo,
         ]);
     }
 

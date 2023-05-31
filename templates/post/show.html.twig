@@ -20,7 +20,15 @@
                     <img src="{{ author.thumbnail }}" alt="{{ author.name }}" class="w-[38px] h-[38px] rounded-full mr-3">
                     <div>
                         <p class="text-white font-sans text-sm ">Par <b>{{ author.name }}</b></p>
-                        <p class="text-white text-sm font-sans">il y a {{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</p>
+                        <p class="text-white text-sm font-sans">
+                            {% if hoursAgo < 1 %}
+                                il y a {{ minutesAgo }} minute{{ minutesAgo > 1 ? 's' : '' }}
+                            {% elseif hoursAgo < 24 %}
+                                il y a {{ hoursAgo }} heure{{ hoursAgo > 1 ? 's' : '' }}
+                            {% else %}
+                                il y a {{ daysAgo }} jour{{ daysAgo > 1 ? 's' : '' }}
+                            {% endif %}
+                        </p>
                     </div>
                 </div>
             </div>
