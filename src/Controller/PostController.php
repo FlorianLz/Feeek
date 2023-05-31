@@ -43,10 +43,27 @@ class PostController extends AbstractController
     #[Route('/{id}', name: 'app_post_show', methods: ['GET'])]
     public function show(Post $post): Response
     {
+        $author = $post->getAuthor();
+        $tags = $post->getTags();
+        $date = $post->getCreatedAt();
+
+        $now = new \DateTime();
+        $diff = $now->diff($date);
+
+        $daysAgo = $diff->days;
+        $hoursAgo = $diff->h;
+        $minutesAgo = $diff->i;
+
         return $this->render('post/show.html.twig', [
             'post' => $post,
+            'author' => $author,
+            'tags' => $tags,
+            'daysAgo' => $daysAgo,
+            'hoursAgo' => $hoursAgo,
+            'minutesAgo' => $minutesAgo,
         ]);
     }
+
 
     #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, PostRepository $postRepository): Response
