@@ -19,7 +19,7 @@ class HomeController extends AbstractController
         //Get all posts
         $posts = $this->postRepository->findAll();
         //Randomize posts
-        //shuffle($posts);
+        shuffle($posts);
         $connectedUser = $this->getUser();
         $favorites = $connectedUser?->getFavorites();
         $tabFavorites = [];
