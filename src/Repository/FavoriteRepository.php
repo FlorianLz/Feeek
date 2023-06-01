@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Favorite;
+use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @extends ServiceEntityRepository<Favorite>
@@ -63,4 +65,22 @@ class FavoriteRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+    public function toggleFavorite(UserInterface $user, Post $post)
+    {
+        $favorite = $this->findOneBy([
+            'user' => $user,
+            'post' => $post,
+        ]);
+
+        if ($favorite) {
+            $this->remove($favorite, true);
+        } else {
+            $favorite = new Favorite();
+            $favorite->setUserId($user);
+            $favorite->setPostId($post);
+            $this->save($favorite, true);
+        }
+        return $favorite;
+    }
 }

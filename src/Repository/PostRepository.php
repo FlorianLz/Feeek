@@ -48,4 +48,24 @@ class PostRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+    public function findAllFavorites($user)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.favorites', 'f')
+            ->andWhere('f.user = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findBySearch(string $search)
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.title LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('p.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

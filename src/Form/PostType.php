@@ -16,8 +16,9 @@ class PostType extends AbstractType
             ->add('description')
             ->add('thumbnail')
             ->add('url')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('createdAt', null, [
+                'widget' => 'single_text'
+            ])
             ->add('author')
             ->add('tags')
         ;

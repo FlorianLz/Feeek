@@ -107,7 +107,12 @@ class RSSExtractor
             $thumbnailUrl = $this->findThumbnailInPostContent($xmlPost) ?: null;
         }
 
-        return $thumbnailUrl ?: 'https://images.unsplash.com/photo-1515787366009-7cbdd2dc587b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80';
+        if ($thumbnailUrl) return $thumbnailUrl;
+
+        $tags = $this->getTags($xmlPost);
+        $unsplashImageSearch = new UnsplashImageSearch(isset($tags[0]) ? $tags[0]->getName() : null);
+
+        return  $unsplashImageSearch->getImage();
     }
 
     private function findThumbnailInPostContent($xmlPost): bool|string
@@ -142,7 +147,7 @@ class RSSExtractor
             $postToCreate = new Post();
             $postToCreate->setTitle($xmlPost->title->__toString());
             $postToCreate->setAuthor($author);
-            $postToCreate->setDescription($xmlPost->description->__toString());
+            $postToCreate->setDescription(strip_tags($xmlPost->description->__toString()));
             $postToCreate->setUrl($xmlPost->link->__toString());
             $postToCreate->setCreatedAt(new \DateTimeImmutable());
 
