@@ -1,4 +1,34 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="w-full flex justify-center items-center">
+    <form class="bg-white rounded px-8 pt-6 pb-8 mb-4" method="post">
+        {{ form_row(form.title, {'label': 'Title', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2', 'placeholder': 'Title'}}) }}
+
+        {{ form_row(form.description, {'label': 'Description', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2', 'placeholder': 'Description'}}) }}
+
+        {{ form_row(form.thumbnail, {'label': 'Thumbnail', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2', 'placeholder': 'Thumbnail URL'}}) }}
+
+        {{ form_row(form.url, {'label': 'URL', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2', 'placeholder': 'URL'}}) }}
+
+        {{ form_row(form.createdAt, {'label': 'Created At', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+
+        {{ form_row(form.updatedAt, {'label': 'Updated At', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2'}}) }}
+
+        {{ form_row(form.author, {'label': 'Author', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2', 'placeholder': 'Author'}}) }}
+
+        {{ form_row(form.tags, {'label': 'Tags', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2', 'placeholder': 'Tags'}}) }}
+
+        <div class="flex items-center justify-between">
+            <button class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                {{ button_label|default('Save') }}
+            </button>
+        </div>
+
+        {{ form_widget(form._token) }}
+    </form>
+</div>
+
+
+
+
+
+
+
