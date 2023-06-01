@@ -147,7 +147,7 @@ class RSSExtractor
             $postToCreate = new Post();
             $postToCreate->setTitle($xmlPost->title->__toString());
             $postToCreate->setAuthor($author);
-            $postToCreate->setDescription($xmlPost->description->__toString());
+            $postToCreate->setDescription(strip_tags($xmlPost->description->__toString()));
             $postToCreate->setUrl($xmlPost->link->__toString());
             $postToCreate->setCreatedAt(new \DateTimeImmutable());
 
