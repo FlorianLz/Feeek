@@ -1,45 +1,39 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Post index{% endblock %}
-
 {% block body %}
-    <h1>Post index</h1>
 
-    <table class="table">
-        <thead>
+    <div class="mt-5">
+        <a  href="{{ path('app_post_new') }}" class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Créer un nouvel article</a>
+    </div>
+
+    <div class="relative overflow-x-auto mt-5">
+        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Thumbnail</th>
-                <th>Url</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Titre
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Voir l'article
+                </th>
+                <th scope="col" class="px-6 py-3 text-center">
+                    Modifier
+                </th>
             </tr>
-        </thead>
-        <tbody>
-        {% for post in posts %}
-            <tr>
-                <td>{{ post.id }}</td>
-                <td>{{ post.title }}</td>
-                <td>{{ post.description }}</td>
-                <td>{{ post.thumbnail }}</td>
-                <td>{{ post.url }}</td>
-                <td>{{ post.createdAt ? post.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ post.updatedAt ? post.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_post_show', {'id': post.id}) }}">show</a>
+            </thead>
+            <tbody>
+            {% for post in posts %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                    {{ post.title }}
+                </th>
+                <td class="px-6 py-4 text-center">
+                    <a href="{{ post.url }}" target="_blank">Voir</a>
+                </td>
+                <td class="px-6 py-4 text-center">
                     <a href="{{ path('app_post_edit', {'id': post.id}) }}">edit</a>
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_post_new') }}">Create new</a>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}
