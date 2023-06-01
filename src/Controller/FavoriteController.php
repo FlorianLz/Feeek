@@ -24,6 +24,9 @@ class FavoriteController extends AbstractController
     #[Route('/favorite/toggle', name: 'app_favorite')]
     public function toggleFavorite(Request $request): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
         $user = $this->getUser();
         $data = json_decode( $request->getContent(), true);
         $idPost = $data['idPost'];
@@ -37,6 +40,9 @@ class FavoriteController extends AbstractController
     #[Route('/favorites', name: 'app_favorites_home')]
     public function favorites(Request $request): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
         $connectedUser = $this->getUser();
         $favorites = $this->postRepository->findAllFavorites($connectedUser);
 

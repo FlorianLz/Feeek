@@ -51,6 +51,7 @@
                         <span class="font-bold text-base">Accueil</span>
                     </a>
                 </li>
+                {% if app.user is not null %}
                 <li>
                     <a href="{{ path('app_favorites_home') }}"
                        class="flex gap-2 {% if app.request.get('_route') == 'app_favorites_home' %} text-primary {% endif%}">
@@ -60,6 +61,7 @@
                         <span class="font-bold text-base">Favoris</span>
                     </a>
                 </li>
+                {% endif %}
                 <li>
                     {% if app.user is not null %}
                         <a href="{{ path('app_account') }}"
@@ -78,7 +80,7 @@
                         </a>
                         {% else %}
                         <a href="{{ path('app_login') }}"
-                           class="flex gap-2 {% if app.request.get('_route') == 'app_login' %} text-primary {% endif%}">
+                           class="flex gap-2 {% if app.request.get('_route') == 'app_login' or app.request.get('_route') == 'app_register' %} text-primary {% endif%}">
                             <svg viewBox="0 0 20 20" fill="currentColor" class="w-5">
                                 <mask id="mask0_20_252" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0"
                                       width="20" height="20">
@@ -89,7 +91,8 @@
                                     <path d="M0 0H20V20H0V0Z" fill="currentColor"/>
                                 </g>
                             </svg>
-                            <span class="font-bold text-base">Mon compte</span>
+                            <span class="font-bold text-base">
+                            {% if app.request.get('_route') == 'app_register' %} Inscription {% else %} Connexion {% endif%}</span>
                         </a>
                     {% endif %}
                 </li>

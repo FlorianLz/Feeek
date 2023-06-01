@@ -16,22 +16,24 @@ class PostController extends AbstractController
     #[Route('/', name: 'app_post_index', methods: ['GET'])]
     public function index(PostRepository $postRepository): Response
     {
-        return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAll(),
-        ]);
+        return $this->redirectToRoute('app_account', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/new', name: 'app_post_new', methods: ['GET', 'POST'])]
     public function new(Request $request, PostRepository $postRepository): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
         $post = new Post();
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
+        $post->setUpdatedAt(new \DateTimeImmutable());
 
         if ($form->isSubmitted() && $form->isValid()) {
             $postRepository->save($post, true);
 
-            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_account', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('post/new.html.twig', [
@@ -68,13 +70,20 @@ class PostController extends AbstractController
     #[Route('/{id}/edit', name: 'app_post_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Post $post, PostRepository $postRepository): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if(!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_account');
+        }
         $form = $this->createForm(PostType::class, $post);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $post->setUpdatedAt(new \DateTimeImmutable());
             $postRepository->save($post, true);
 
-            return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_account', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('post/edit.html.twig', [
@@ -86,10 +95,16 @@ class PostController extends AbstractController
     #[Route('/{id}', name: 'app_post_delete', methods: ['POST'])]
     public function delete(Request $request, Post $post, PostRepository $postRepository): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if(!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_account');
+        }
         if ($this->isCsrfTokenValid('delete'.$post->getId(), $request->request->get('_token'))) {
             $postRepository->remove($post, true);
         }
 
-        return $this->redirectToRoute('app_post_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_account', [], Response::HTTP_SEE_OTHER);
     }
 }
