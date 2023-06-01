@@ -1,4 +1,38 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="w-full flex justify-center flex flex-col">
+    <div class="mx-8 mt-4 flex justify-between items-center">
+        <a href="{{ path('app_account') }}" class="text-black underline">Retour à la liste</a>
+    {% if delete == "true" %}
+        {{ include('post/_delete_form.html.twig') }}
+    {% endif %}
+    </div>
+    <form class="bg-white rounded px-8 pt-6 pb-8 mb-4 w-full" method="post">
+        {{ form_row(form.title, {'label': 'Titre du post', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2 w-full', 'placeholder': 'Title'}}) }}
+
+        {{ form_row(form.description, {'label': 'Description', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2 w-full', 'placeholder': 'Description'}}) }}
+
+        {{ form_row(form.thumbnail, {'label': 'Illustration', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2 w-full', 'placeholder': 'Thumbnail URL'}}) }}
+
+        {{ form_row(form.url, {'label': 'URL', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2 w-full', 'placeholder': 'URL'}}) }}
+
+        {{ form_row(form.createdAt, {'label': 'Date de création', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2 w-full'}}) }}
+
+        {{ form_row(form.author, {'label': 'Auteur', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2 w-full', 'placeholder': 'Author'}}) }}
+
+        {{ form_row(form.tags, {'label': 'Tags', 'attr': {'class': 'block text-gray-700 text-sm font-bold mb-2 w-full', 'placeholder': 'Tags'}}) }}
+
+        <div class="flex items-center justify-between">
+            <button class="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                {{ button_label|default('Créer') }}
+            </button>
+        </div>
+
+        {{ form_widget(form._token) }}
+    </form>
+</div>
+
+
+
+
+
+
+

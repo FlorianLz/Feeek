@@ -15,16 +15,16 @@ class AccountController extends AbstractController
     #[Route('/account', name: 'app_account')]
     public function index(): Response
     {
-        $isAdministrator = $this->isGranted('ROLE_ADMIN');
-        if ($isAdministrator) {
-            $posts = $this->postRepository->findAll();
-        } else{
-            $posts = $this->postRepository->findBy(['author' => $this->getUser()]);
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
         }
+        $isAdministrator = $this->isGranted('ROLE_ADMIN');
+        $posts = $this->postRepository->findAll();
 
         return $this->render('account/index.html.twig', [
             'controller_name' => 'AccountController',
-            'posts' => $posts
+            'posts' => $posts,
+            'isAdmin' => $isAdministrator
         ]);
     }
 }
