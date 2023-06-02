@@ -4,124 +4,91 @@
 
 {% block body %}
 
-<form class="pt-4 mb-4 fixed w-8/12 z-10 bg-white">
-    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Recherche</label>
-    <div class="relative">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </div>
-        <input type="search" id="default-search" name="search" class="block w-full p-4 pl-10 text-sm text-gray-900
-        border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary/50 focus:border-blue-500"
-               placeholder="Rechercher un article..." required>
-        <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-primary hover:bg-blue-800
-        focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-4
-        py-2">Rechercher</button>
-    </div>
-</form>
-
-<div class="flex flex-col justify-center items-center gap-10 mt-28">
-    {% for post in posts %}
-        {% set now = date() %}
-        {% set postDate = post.createdAt %}
-        {% set hoursAgo = now.diff(postDate).format('%h') %}
-        {% set minutesAgo = now.diff(postDate).format('%i') %}
-        {% set daysAgo = now.diff(postDate).format('%d') %}
-
-        <a href="{{ post.url }}" class="relative block w-96 h-[697px] rounded-3xl overflow-hidden shadow-lg no-underline">
-        <img src="{{ post.thumbnail }}" alt="{{ post.title }}" class="w-96 h-[697px] rounded-3xl object-cover">
-        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-transparent flex justify-between flex-col">
-            <div class="p-4 flex flex-wrap">
-                <div class="w-5/6 flex flex-wrap gap-1">
-                    {% for tag in post.tags %}
-                        <span class="p-1 text-black bg-white bg-opacity-50 rounded">{{ tag.name }}</span>
-                    {% endfor %}
-                </div>
-                <div class="w-1/6 flex justify-center">
-                    {% if connectedUser %}
-                    {% if post.id in favorites %}
-                        <button class="likeButton bg-white  like w-9 h-9 flex justify-center items-center rounded-lg" data-idPost="{{ post.id }}">
-                            <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-secondary">
-                                <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
-                            </svg>
-                        </button>
-                        <button class="likeButton bg-[#FFFFFF33]  noLike hidden w-9 h-9 flex justify-center items-center rounded-lg" data-idPost="{{ post.id }}">
-                            <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-secondary">
-                                <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
-                            </svg>
-                        </button>
-                    {% else %}
-                        <button class="likeButton bg-white  like w-9 h-9 flex justify-center items-center rounded-lg hidden" data-idPost="{{ post.id }}">
-                            <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-secondary">
-                                <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
-                            </svg>
-                        </button>
-                        <button class="likeButton bg-[#FFFFFF33]  noLike w-9 h-9 flex justify-center items-center rounded-lg" data-idPost="{{ post.id }}">
-                            <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-grey">
-                                <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
-                            </svg>
-                        </button>
-                    {% endif %}
-                {% endif %}
-                </div>
+    <form class="pt-4 mb-4 fixed w-8/12 z-10 bg-white">
+        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Recherche</label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
             </div>
-            <div class="p-4">
-                <h2 class="text-xl font-sans font-bold text-white mb-1">{{ post.title }}</h2>
-                <p class="text-sm font-sans text-white">{{ post.description }}</p>
-                <div class="flex align-items-center justify-content-center mt-5 mb-5">
-                    <img src="{{ post.author.thumbnail }}" alt="{{ post.author.name }}" class="w-[38px] h-[38px] rounded-full mr-3">
-                    <div>
-                        <p class="text-white font-sans text-sm ">Par <b>{{ post.author.name }}</b></p>
-                        <p class="text-white text-sm font-sans">
-                            {% if hoursAgo < 1 %}
-                                il y a {{ minutesAgo }} minute{{ minutesAgo > 1 ? 's' : '' }}
-                            {% elseif hoursAgo < 24 %}
-                                il y a {{ hoursAgo }} heure{{ hoursAgo > 1 ? 's' : '' }}
-                            {% else %}
-                                il y a {{ daysAgo }} jour{{ daysAgo > 1 ? 's' : '' }}
-                            {% endif %}
-                        </p>
+            <input type="search" id="default-search" name="search" class="block w-full p-4 pl-10 text-sm text-gray-900
+            border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary/50 focus:border-blue-500"
+                   placeholder="Rechercher un article..." required>
+            <button type="submit" class="text-white absolute right-2.5 bottom-2.5 bg-primary hover:bg-blue-800
+            focus:ring-4 focus:outline-none focus:ring-primary/50 font-medium rounded-lg text-sm px-4
+            py-2">Rechercher</button>
+        </div>
+    </form>
+
+    <div class="flex flex-col justify-center items-center gap-10 mt-28">
+        {% for post in posts %}
+            {% set now = date() %}
+            {% set postDate = post.createdAt %}
+            {% set hoursAgo = now.diff(postDate).format('%h') %}
+            {% set minutesAgo = now.diff(postDate).format('%i') %}
+            {% set daysAgo = now.diff(postDate).format('%d') %}
+
+            <a href="{{ post.url }}" class="relative block w-96 h-[697px] rounded-3xl overflow-hidden shadow-lg no-underline">
+            <img src="{{ post.thumbnail }}" alt="{{ post.title }}" class="w-96 h-[697px] rounded-3xl object-cover">
+            <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-t from-black to-transparent flex justify-between flex-col">
+                <div class="p-4 flex flex-wrap">
+                    <div class="w-5/6 flex flex-wrap gap-1">
+                        {% for tag in post.tags %}
+                            <span class="p-1 text-black bg-white bg-opacity-50 rounded">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="w-1/6 flex justify-center">
+                        {% if connectedUser %}
+                        {% if post.id in favorites %}
+                            <button class="likeButton bg-white  like w-9 h-9 flex justify-center items-center rounded-lg" data-idPost="{{ post.id }}">
+                                <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-secondary">
+                                    <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
+                                </svg>
+                            </button>
+                            <button class="likeButton bg-[#FFFFFF33]  noLike hidden w-9 h-9 flex justify-center items-center rounded-lg" data-idPost="{{ post.id }}">
+                                <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-secondary">
+                                    <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
+                                </svg>
+                            </button>
+                        {% else %}
+                            <button class="likeButton bg-white  like w-9 h-9 flex justify-center items-center rounded-lg hidden" data-idPost="{{ post.id }}">
+                                <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-secondary">
+                                    <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
+                                </svg>
+                            </button>
+                            <button class="likeButton bg-[#FFFFFF33]  noLike w-9 h-9 flex justify-center items-center rounded-lg" data-idPost="{{ post.id }}">
+                                <svg viewBox="0 0 20 20" fill="currentColor" class="w-5 text-grey">
+                                    <path d="M18.0273 5.53908C17.7655 4.9329 17.3881 4.38359 16.916 3.92189C16.4436 3.45881 15.8866 3.09082 15.2754 2.8379C14.6416 2.57461 13.9617 2.43984 13.2754 2.44142C12.3125 2.44142 11.373 2.70509 10.5566 3.20314C10.3613 3.32228 10.1758 3.45314 10 3.59572C9.82422 3.45314 9.63867 3.32228 9.44336 3.20314C8.62695 2.70509 7.6875 2.44142 6.72461 2.44142C6.03125 2.44142 5.35938 2.57423 4.72461 2.8379C4.11133 3.09181 3.55859 3.45705 3.08398 3.92189C2.61132 4.38306 2.23375 4.93251 1.97266 5.53908C1.70117 6.16994 1.5625 6.83986 1.5625 7.52931C1.5625 8.1797 1.69531 8.85744 1.95898 9.54689C2.17969 10.1231 2.49609 10.7207 2.90039 11.3242C3.54102 12.2793 4.42188 13.2754 5.51562 14.2852C7.32812 15.959 9.12305 17.1152 9.19922 17.1621L9.66211 17.459C9.86719 17.5899 10.1309 17.5899 10.3359 17.459L10.7988 17.1621C10.875 17.1133 12.668 15.959 14.4824 14.2852C15.5762 13.2754 16.457 12.2793 17.0977 11.3242C17.502 10.7207 17.8203 10.1231 18.0391 9.54689C18.3027 8.85744 18.4355 8.1797 18.4355 7.52931C18.4375 6.83986 18.2988 6.16994 18.0273 5.53908Z"></path>
+                                </svg>
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="p-4">
+                    <h2 class="text-xl font-sans font-bold text-white mb-1">{{ post.title }}</h2>
+                    <p class="text-sm font-sans text-white">{{ post.description }}</p>
+                    <div class="flex align-items-center justify-content-center mt-5 mb-5">
+                        <img src="{{ post.author.thumbnail }}" alt="{{ post.author.name }}" class="w-[38px] h-[38px] rounded-full mr-3">
+                        <div>
+                            <p class="text-white font-sans text-sm ">Par <b>{{ post.author.name }}</b></p>
+                            <p class="text-white text-sm font-sans">
+                                {% if hoursAgo < 1 %}
+                                    il y a {{ minutesAgo }} minute{{ minutesAgo > 1 ? 's' : '' }}
+                                {% elseif hoursAgo < 24 %}
+                                    il y a {{ hoursAgo }} heure{{ hoursAgo > 1 ? 's' : '' }}
+                                {% else %}
+                                    il y a {{ daysAgo }} jour{{ daysAgo > 1 ? 's' : '' }}
+                                {% endif %}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </a>
-    {% endfor %}
-    {% if nbArticles == 0 %}
-        <p class="text-center font-sans text-xl">Aucun article n'a été trouvé</p>
-    {% endif %}
-</div>
-
-    <script>
-        console.log('test');
-        const likeButtons = document.querySelectorAll('.likeButton');
-        likeButtons.forEach(likeButton => {
-            likeButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                const idPost = likeButton.dataset.idpost;
-                fetch('/favorite/toggle', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        idPost: idPost
-                    })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if(data.success){
-                        if(likeButton.classList.contains('like')){
-                            likeButton.classList.add('hidden');
-                            document.querySelector(`.noLike[data-idPost="${idPost}"]`).classList.remove('hidden');
-                        }else{
-                            likeButton.classList.add('hidden');
-                            document.querySelector(`.like[data-idPost="${idPost}"]`).classList.remove('hidden');
-                        }
-                    }
-                })
-            })
-        });
-
-    </script>
-
+        </a>
+        {% endfor %}
+        {% if nbArticles == 0 %}
+            <p class="text-center font-sans text-xl">Aucun article n'a été trouvé</p>
+        {% endif %}
+    </div>
+    <script src="{{ asset('js/script.js') }}"></script>
 {% endblock %}
