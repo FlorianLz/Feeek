@@ -20,13 +20,13 @@ class RSSExtractor
     private AuthorRepository $authorRepository;
     private PostRepository $postRepository;
     private TagRepository $tagRepository;
-    private SymfonyStyle $io;
+    private ?SymfonyStyle $io;
 
     public function __construct(
         AuthorRepository $authorRepository,
         PostRepository   $postRepository,
         TagRepository    $tagRepository,
-        SymfonyStyle     $io
+        ?SymfonyStyle    $io = null
     )
     {
         $this->authorRepository = $authorRepository;
@@ -112,14 +112,14 @@ class RSSExtractor
         $tags = $this->getTags($xmlPost);
         $unsplashImageSearch = new UnsplashImageSearch(isset($tags[0]) ? $tags[0]->getName() : null);
 
-        return  $unsplashImageSearch->getImage();
+        return $unsplashImageSearch->getImage();
     }
 
     private function findThumbnailInPostContent($xmlPost): bool|string
     {
         preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i', $xmlPost->description->__toString(), $matches);
 
-        if (count($matches) <= 0) return false;
+        if (empty($matches)) return false;
 
         $src = $matches['src'];
 
@@ -168,9 +168,9 @@ class RSSExtractor
             /***
              * Save Post
              */
-            $this->io->writeln('Saving post: ' . $postToCreate->getTitle() . ' ...');
+            $this->io?->writeln('Saving post: ' . $postToCreate->getTitle() . ' ...');
             $this->postRepository->save($postToCreate, true);
-            $this->io->writeln('Post: ' . $postToCreate->getTitle() . ' saved !');
+            $this->io?->writeln('Post: ' . $postToCreate->getTitle() . ' saved !');
         }
 
         $this->postRepository->findByTitle($xmlPost->title->__toString());

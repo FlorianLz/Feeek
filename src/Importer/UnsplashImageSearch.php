@@ -23,9 +23,10 @@ class UnsplashImageSearch
         curl_setopt($curl, CURLOPT_HEADER, 0);
         curl_setopt($curl, CURLOPT_NOBODY, 0);
         curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_exec($curl);
         curl_close($curl);
 
-        if (isset(curl_getinfo($curl)['url'])){
+        if (isset(curl_getinfo($curl)['url'])) {
             return curl_getinfo($curl)['url'];
         }
 
