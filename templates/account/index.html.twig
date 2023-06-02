@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Feeek - Mon compte{% endblock %}
+
+{% block body %}
+
+    {% include 'post/index.html.twig' with {'posts': posts} %}
+
+{% endblock %}
