@@ -16,14 +16,19 @@ class TagController extends AbstractController
     #[Route('/', name: 'app_tag_index', methods: ['GET'])]
     public function index(TagRepository $tagRepository): Response
     {
-        return $this->render('tag/index.html.twig', [
-            'tags' => $tagRepository->findAll(),
-        ]);
+        return $this->redirectToRoute('app_account', [], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/new', name: 'app_tag_new', methods: ['GET', 'POST'])]
     public function new(Request $request, TagRepository $tagRepository): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if(!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_account');
+        }
+
         $tag = new Tag();
         $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);
@@ -43,14 +48,18 @@ class TagController extends AbstractController
     #[Route('/{id}', name: 'app_tag_show', methods: ['GET'])]
     public function show(Tag $tag): Response
     {
-        return $this->render('tag/show.html.twig', [
-            'tag' => $tag,
-        ]);
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/{id}/edit', name: 'app_tag_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Tag $tag, TagRepository $tagRepository): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if(!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_account');
+        }
         $form = $this->createForm(TagType::class, $tag);
         $form->handleRequest($request);
 
@@ -69,6 +78,12 @@ class TagController extends AbstractController
     #[Route('/{id}', name: 'app_tag_delete', methods: ['POST'])]
     public function delete(Request $request, Tag $tag, TagRepository $tagRepository): Response
     {
+        if(!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+        if(!$this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_account');
+        }
         if ($this->isCsrfTokenValid('delete'.$tag->getId(), $request->request->get('_token'))) {
             $tagRepository->remove($tag, true);
         }
