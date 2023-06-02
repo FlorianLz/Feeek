@@ -1,5 +1,5 @@
 <div class="w-full flex justify-center flex flex-col">
-    <div class="mx-8 mt-4 flex justify-between items-center">
+    <div class="mx-8 mt-4 flex justify-between items-center z-10">
         <a href="{{ path('app_account') }}" class="text-black underline">Retour à la liste</a>
     {% if delete == "true" %}
         {{ include('post/_delete_form.html.twig') }}
